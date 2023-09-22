@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:state_management/GetX/Localization/localization.dart';
 import 'package:state_management/GetX/Localization/localizationPage.dart';
 import 'package:state_management/GetX/Reactive/reactiveStateManegement.dart';
 import 'package:state_management/GetX/Simple/simpleStateManegement.dart';
+import 'package:state_management/cubit/counter_cubit.dart';
+import 'package:state_management/cubit/counter_cubit_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,16 +18,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      translations: Localization(),
-      locale: const Locale('tr', 'TR'),  //  Get.deviceLocale, o anki cihazın dilini kullanmak için
-      fallbackLocale: const Locale('en', 'US'),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BlocProvider<CounterCubit>(
+      create: (context) => CounterCubit(),
+      child: GetMaterialApp(
+        title: 'Flutter Demo',
+        translations: Localization(),
+        locale: const Locale('tr',
+            'TR'), //  Get.deviceLocale, o anki cihazın dilini kullanmak için
+        fallbackLocale: const Locale('en', 'US'),
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'Flutter State Management'),
       ),
-      home: const MyHomePage(title: 'Flutter State Management'),
     );
   }
 }
@@ -65,6 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   Get.to(LocalizationPage());
                 },
                 child: const Text("GetX Localization")),
+            ElevatedButton(
+                onPressed: () {
+                  Get.to(CounterCubitWidget());
+                },
+                child: const Text("Block  Counter")),
           ],
         ),
       ),
